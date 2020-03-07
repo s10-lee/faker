@@ -21,12 +21,12 @@ sudo pip3 install pynput
 ### Usage 
 Open terminal window in your IDE.  
 
-```bash
+```
 python3 main.py [options]
 
 Options:
---total, -t         IDLE time in minutes        default: 5 min
---interval, -i      Keybord keypress interval   default: 10 sec 
+--total, -t         Duration in minutes     [5 min]
+--interval, -i      Keypress interval       [10 sec] 
 ```
 
 Trigger keypress, every 12 seconds, for 30 minutes,  
