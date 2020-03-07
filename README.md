@@ -1,5 +1,4 @@
-# Faking keypress
-Messing up with [Hubstaff](https://hubstaff.com/) activity tracking. 
+# Faking [hubstaff](https://hubstaff.com/) tracking
 
 ### Installation
 Check versions and current user
@@ -20,7 +19,7 @@ sudo pip3 install pynput
 
 
 ### Usage 
-Open terminal window, in your IDE to faking activity.  
+Open terminal window in your IDE.  
 
 ```bash
 python3 main.py [options]
@@ -38,4 +37,4 @@ python3 main.py -t 30 -i 12
 ```
 
 ### Important
-To track fake activity as IDE usage - cursor / focus, should always been inside terminal window, while script is running. 
+Terminal window should always be active, while script is running.
