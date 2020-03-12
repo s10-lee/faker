@@ -51,9 +51,9 @@ def run():
 
         # Left time
         h = timeout // 3600
-        timeout -= h * 3600
-        m = timeout // 60
-        s = timeout % 60
+        time_left = timeout - h * 3600
+        m = time_left // 60
+        s = time_left % 60
 
         info(f'\r   - {reduce} sec')
         echo(f'{h:02}:{m:02}:{s:02}')
