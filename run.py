@@ -1,4 +1,4 @@
-from src.mixins import success, info, echo, ask, nl, h1, echo_nl
+from src.mixins import success, info, echo, ask, nl, h1, confirm
 from src.utils import get_source, get_console_option, write_code, get_random
 import time
 
@@ -64,8 +64,16 @@ def run():
     nl(2)
 
     #
-    #   CountDown if source exists
+    #   CountDown if source exists and confirmed
     #
+    if source:
+        check = confirm('Start dictating code from a source ? (yes/no)', default=False)
+        echo('Yes' if check else 'No')
+
+        if not check:
+            source = False
+    nl()
+
     if source:
         time.sleep(1)
         for i in range(3):
@@ -73,6 +81,7 @@ def run():
             time.sleep(1)
 
     echo('START', bold=True, color='cyan')
+    nl()
 
     start = 0
     while timeout > 0:
@@ -99,7 +108,8 @@ def run():
             countdown = f'{h:02}:{countdown}'
 
         info(f'\r   - {reduce} sec', bold=True)
-        echo_nl(countdown, bold=True)
+        echo(countdown, bold=True)
+        nl()
         time.sleep(sleep)
 
     nl(2)

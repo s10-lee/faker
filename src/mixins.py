@@ -36,7 +36,8 @@ def error(text, **kwargs):
 
 
 def confirm(text, **kwargs):
-    return BaseConsole.read(text, var_type=bool, **kwargs)
+    result = BaseConsole.read(text, var_type=bool, **kwargs)
+    return result
 
 
 def ask(text, **kwargs):
