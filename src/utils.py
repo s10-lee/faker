@@ -4,7 +4,7 @@ from pynput.keyboard import Key, Controller
 from random import randint
 import sys
 from glob import glob
-
+import time
 keyboard = Controller()
 
 
@@ -14,19 +14,20 @@ def get_random(mn, mx):
     return mx
 
 
-def get_source_files(wildcard):
+def get_source(wildcard):
     if wildcard:
         files = glob(wildcard, recursive=True)
-        return files
+        return load_files(*files)
     return None
 
 
-def get_source_from_files(*args):
+def load_files(*args):
     result = ''
     for f in args:
         path = join(realpath(f))
-        with open(path) as fp:
-            result += ''.join([l for l in fp.readlines()]) + '\n\n\n'
+        if exists(path):
+            with open(path) as fp:
+                result += ''.join([l for l in fp.readlines()]) + '\n\n\n'
     return result
 
 
@@ -49,8 +50,8 @@ def write_code(code: str):
     return round(spent, 2)
 
 
-def get_console_option(shortcuts, typecast=None):
-    value = None
+def get_console_option(shortcuts, typecast=None, default=None):
+    value = default
     length = len(sys.argv)
     if isinstance(shortcuts, str):
         shortcuts = [shortcuts]

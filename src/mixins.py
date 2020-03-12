@@ -3,9 +3,16 @@ from src.console import BaseConsole
 echo = BaseConsole.write
 
 
-def echo_nl(*args, nl=1, **kwargs):
-    kwargs['end'] = kwargs.get('end', '') + BaseConsole.CRLF * nl
-    return echo(*args)
+def echo_nl(*args, indent=1, **kwargs):
+    indent = int(indent)
+    kwargs['end'] = None
+    crlf = abs(indent) * '\n'
+    if indent > 0:
+        arguments = *args, abs(indent) * '\n'
+    else:
+        kwargs['end'] = ''
+        arguments = abs(indent) * '\n', *args
+    echo(*arguments, **kwargs)
 
 
 def h1(text):
