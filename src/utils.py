@@ -1,11 +1,16 @@
 from os.path import dirname, abspath, join, exists, realpath, curdir
 import os
-from pynput.keyboard import Key, Controller
+import subprocess
+from pynput.keyboard import Key, Controller as cone
+from pynput.mouse import Button, Controller as ctwo
 from random import randint
 import sys
 from glob import glob
 import time
-keyboard = Controller()
+
+# Init
+keyboard = cone()
+mouse = ctwo()
 
 
 def get_random(mn, mx):
@@ -50,7 +55,7 @@ def write_code(code: str):
     return round(spent, 2)
 
 
-def get_console_option(shortcuts, typecast=None, default=None):
+def get_console_option(shortcuts, typecast=None, default=None, many=False):
     value = default
     length = len(sys.argv)
     if isinstance(shortcuts, str):
@@ -60,8 +65,62 @@ def get_console_option(shortcuts, typecast=None, default=None):
         for index, argument in enumerate(sys.argv):
             if argument in shortcuts and length > index + 1:
                 value = sys.argv[index + 1]
+                if many and value:
+                    value = [value]
+                    for a in sys.argv[index + 2:]:
+                        if a.startswith('-'):
+                            break
+                        else:
+                            value.append(a)
+
 
                 if typecast:
                     return typecast(value)
 
     return value
+
+
+def command_tab():
+    with keyboard.pressed(Key.cmd_l):
+        keyboard.press(Key.tab)
+        keyboard.release(Key.tab)
+
+
+# def mouse_y(v, step, start, end, interval):
+#     while True:
+#         v += step
+#         if start < v < end:
+#             time.sleep(interval)
+#             mouse.move(0, step)
+#         else:
+#             break
+#     return v
+
+
+def mouse_move(val, step, start, end, interval):
+    while True:
+        val += step
+        if start <= val <= end:
+            time.sleep(interval)
+            mouse.move(step, 0)
+        else:
+            break
+    return val
+
+
+def fake_mouse(limit=5):
+    x, y = 400, 400
+    itr = .002
+    mouse.position = (400, 400)
+    time.sleep(2)
+
+    for _ in range(limit):
+        y = mouse_move(y, 1, 400, 800, itr)
+        x = mouse_move(x, 1, 600, 900, itr)
+        y = mouse_move(y, -1, 400, 800, itr)
+        x = mouse_move(x, -1, 600, 900, itr)
+
+
+if __name__ == '__main__':
+    fake_mouse(5)
+

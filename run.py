@@ -1,10 +1,13 @@
 from src.mixins import success, info, echo, ask, nl, h1, confirm
-from src.utils import get_source, get_console_option, write_code, get_random
+from src.utils import get_source, get_console_option, write_code, get_random, open_chrome
 import time
-
-# SOURCE = get_source_from_files('adapters/http.js', 'adapters/xhr.js')
-# SOURCE = get_source_from_files('_source/axios_asdasds.js')
-
+import sys
+import subprocess
+from random import randint, randrange, choice
+from pynput.mouse import Button, Controller
+from pynput.keyboard import Key, Controller as CTRL
+mouse = Controller()
+keyboard = CTRL()
 
 def run():
 
@@ -64,6 +67,13 @@ def run():
     nl(2)
 
     #
+    #   URL
+    #
+    url = get_console_option(['--url', '-u'])
+
+    # sys.exit(1)
+
+    #
     #   CountDown if source exists and confirmed
     #
     if source:
@@ -84,15 +94,50 @@ def run():
     nl()
 
     start = 0
+    x, y = 100, 100
+    ut = 100
+    url_timeout = 0
     while timeout > 0:
-        _before = time.perf_counter()
 
         reduce = get_random(minimum, maximum)
         timeout -= reduce
         length = reduce * 2
         sleep = reduce
 
-        if source:
+        # RUN BROWSER
+        if url and url_timeout <= 0:
+            ut += reduce
+
+        # Swap activity
+        if ut > 60 * 2:
+            ut = 0
+            url_timeout = 60
+
+            # CMD + TAB
+            with keyboard.pressed(Key.cmd_l):
+                keyboard.press(Key.tab)
+                keyboard.release(Key.tab)
+
+            # Set Mouse
+            mouse.position = (x, y)
+
+        if url_timeout <= 0:
+            with keyboard.pressed(Key.cmd_l):
+                keyboard.press(Key.tab)
+                keyboard.release(Key.tab)
+
+        if url_timeout > 0:
+            url_timeout -= reduce
+
+            # Move mouse
+            x = randint(5, 0)
+            mouse.move(x, y)
+
+            if x >= 1000:
+                x, y = 100, 100
+                mouse.position = (x, y)
+
+        elif source:
             code = source[start:start + length]
             spent = write_code(code)
             sleep = round(reduce - spent, 2)
