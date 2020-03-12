@@ -3,14 +3,14 @@ import time
 import sys
 
 SCHEMA = {
-    # 'white': '30',
     'red': '31',
     'green': '32',
     'yellow': '33',
     'blue': '34',
     'purple': '35',
     'cyan': '36',
-    'gray': '37'
+    'gray': '37',
+    'white': '38',
 }
 
 
