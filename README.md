@@ -14,15 +14,13 @@ Open terminal from your IDE
 python3 run.py [options]
 
 Options:
---timeout, --time, -t   Duration in minutes     [10 min] 
+--timeout, -t       Duration in minutes             [10 min]
+--interval, -i      Event trigger interval          [12 sec]
+--path, -p          Wildcard path to source dir     [None]
 ```
 
 Timeout argument
 
 ```bash
-python3 main.py --timeout 30
+python3 run.py --timeout 30 --interva 12
 ```
-
-Then follow the command line prompts
-- Min interval  [default: 12 sec]
-- Max interval  [default: 20 sec]
