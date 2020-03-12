@@ -15,4 +15,4 @@ env.local
 cache
 db.sqlite3
 
-_source
+_source/*.*
