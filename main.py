@@ -1,62 +1,75 @@
 from pynput.keyboard import Key, Controller
+from src.mixins import success, info, echo, ask, nl, h1
+from src.utils import get_random
 import time
-import sys
-
-SCHEMA = {
-    'red': '31',
-    'green': '32',
-    'yellow': '33',
-    'blue': '34',
-    'purple': '35',
-    'cyan': '36',
-    'gray': '37',
-    'white': '38',
-}
 
 
-def color_text(text, color):
-    return f"\033[1;{SCHEMA.get(color, '37')}m{text}\033[0m"
-
-
-def run(total, interval):
-    steps = total // interval + total % interval
-    print('\r\n')
-    print(color_text('START', 'green'))
+def run():
     keyboard = Controller()
-    while steps > 0:
+
+    nl(1)
+    h1('* * * * * * * * * *')
+    h1('*                 *')
+    echo('*  ', bold=True, color='white', end='')
+    echo('^___^ ', bold=True, color='purple', end='', blink=True)
+    echo(' *', bold=True, color='white')
+    h1('*                 *')
+    echo('*  ', bold=True, color='white', end='')
+    echo('Faker ', bold=True, color='white', end='')
+    echo(' *', bold=True, color='white')
+    h1('*                 *')
+    h1('* * * * * * * * * *')
+    nl(1)
+
+    # User input
+    timeout = ask('Total time in minutes ?', default=10, greater=5) * 60
+    echo(f'{timeout // 60} min')
+    nl()
+
+    minimum = ask('Minimum interval in seconds', greater=5, default=12)
+    echo(f'{minimum} sec')
+    nl()
+
+    maximum = ask('Maximum interval, for random offset', greater=minimum + 1, default=20)
+    if maximum:
+        echo(f'{maximum} sec')
+
+    nl(1)
+    echo('START', bold=True, color='cyan')
+    nl()
+
+    while timeout > 0:
+        reduce = get_random(minimum, maximum)
+        timeout -= reduce
+
         keyboard.press(Key.space)
         keyboard.release(Key.space)
 
-        print('\r -', color_text(f'{steps * interval // 60}:{steps * interval % 60:02}', 'cyan'))
-
         # keyboard.press(Key.backspace)
         # keyboard.release(Key.backspace)
-        time.sleep(interval)
-        steps -= 1
+        # reduce -= 1
+        # time.sleep(1)
 
-    print('\r', color_text('DONE', 'green'), sep='')
-    print('\r\n')
+        # Left time
+        h = timeout // 3600
+        time_left = timeout - h * 3600
+        m = time_left // 60
+        s = time_left % 60
+
+        info(f'\r   - {reduce} sec')
+        echo(f'{h:02}:{m:02}:{s:02}')
+
+        time.sleep(reduce)
+
+    nl(2)
+    success('DONE')
 
 
 if __name__ == '__main__':
-
-    # Total idle time to faking (in minutes)
-    total_idle = 5
-
-    # Trigger keyboard event every N seconds
-    interval_in_seconds = 10
-
-    if len(sys.argv) > 1:
-        for index, argument in enumerate(sys.argv):
-            if argument in ['--interval', '-i'] and len(sys.argv) > index + 1:
-                interval_in_seconds = int(sys.argv[index + 1])
-
-            if argument in ['--total', '-t'] and len(sys.argv) > index + 1:
-                total_idle = int(sys.argv[index + 1])
-
     try:
-        run(total_idle * 60, interval_in_seconds)
+        run()
     except KeyboardInterrupt:
-        print('\r\n')
-        print(color_text('Shutting down...', 'green'))
+        nl(1)
+        echo('Shutting down...', bold=True, color='white')
+        nl(1)
 

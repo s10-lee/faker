@@ -227,7 +227,7 @@ class BaseConsole:
                         cls.error('Not integer !')
                         continue
 
-                    if greater and int(line) <= int(greater):
+                    if greater and int(line) < int(greater):
                         cls.error(f'Must be greater than {greater} !')
                         continue
 
