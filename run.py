@@ -1,13 +1,10 @@
 from src.mixins import success, info, echo, ask, nl, h1, confirm
-from src.utils import get_source, get_console_option, write_code, get_random, open_chrome
+from src.utils import get_console_option, write_code, get_random, get_source
+# get_source
 import time
 import sys
-import subprocess
-from random import randint, randrange, choice
 from pynput.mouse import Button, Controller
-from pynput.keyboard import Key, Controller as CTRL
-mouse = Controller()
-keyboard = CTRL()
+
 
 def run():
 
@@ -72,6 +69,7 @@ def run():
     url = get_console_option(['--url', '-u'])
 
     # sys.exit(1)
+    # print(len(source))
 
     #
     #   CountDown if source exists and confirmed
@@ -94,9 +92,7 @@ def run():
     nl()
 
     start = 0
-    x, y = 100, 100
-    ut = 100
-    url_timeout = 0
+    t = 0
     while timeout > 0:
 
         reduce = get_random(minimum, maximum)
@@ -104,38 +100,11 @@ def run():
         length = reduce * 2
         sleep = reduce
 
-        # RUN BROWSER
-        if url and url_timeout <= 0:
-            ut += reduce
+        if url:
+            t += reduce
 
-        # Swap activity
-        if ut > 60 * 2:
-            ut = 0
-            url_timeout = 60
-
-            # CMD + TAB
-            with keyboard.pressed(Key.cmd_l):
-                keyboard.press(Key.tab)
-                keyboard.release(Key.tab)
-
-            # Set Mouse
-            mouse.position = (x, y)
-
-        if url_timeout <= 0:
-            with keyboard.pressed(Key.cmd_l):
-                keyboard.press(Key.tab)
-                keyboard.release(Key.tab)
-
-        if url_timeout > 0:
-            url_timeout -= reduce
-
-            # Move mouse
-            x = randint(5, 0)
-            mouse.move(x, y)
-
-            if x >= 1000:
-                x, y = 100, 100
-                mouse.position = (x, y)
+        if url and t > 300:
+            t = 0
 
         elif source:
             code = source[start:start + length]
@@ -163,6 +132,7 @@ def run():
 
 if __name__ == '__main__':
     try:
+
         run()
     except KeyboardInterrupt:
         nl(1)
