@@ -4,8 +4,8 @@ import subprocess
 from pynput.keyboard import Key, Controller as cone
 from pynput.mouse import Button, Controller as ctwo
 from random import randint
-import sys
-from glob import glob
+# import sys
+import glob
 import time
 
 # Init
@@ -21,7 +21,7 @@ def get_random(mn, mx):
 
 def get_source(wildcard):
     if wildcard:
-        files = glob(wildcard, recursive=True)
+        files = glob.glob(wildcard, recursive=True)
         return load_files(*files)
     return None
 
@@ -55,25 +55,21 @@ def write_code(code: str):
     return round(spent, 2)
 
 
-def get_console_option(shortcuts, typecast=None, default=None, many=False):
-    value = default
+def get_console_option(shortcuts, typecast=None):
+    import sys
+
+    value = None
     length = len(sys.argv)
-    if isinstance(shortcuts, str):
-        shortcuts = [shortcuts]
+
+    # TODO: WTF ?
+    # sys_args = []
+    # for a in tuple(sys.argv):
+    #     sys_args.append(a)
 
     if length:
         for index, argument in enumerate(sys.argv):
             if argument in shortcuts and length > index + 1:
                 value = sys.argv[index + 1]
-                if many and value:
-                    value = [value]
-                    for a in sys.argv[index + 2:]:
-                        if a.startswith('-'):
-                            break
-                        else:
-                            value.append(a)
-
-
                 if typecast:
                     return typecast(value)
 
