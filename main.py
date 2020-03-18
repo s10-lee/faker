@@ -6,6 +6,16 @@ import sys
 from pynput.mouse import Button, Controller
 
 
+def time_left(seconds):
+    remain = ''
+    h, m, s = 0, 0, 0
+    if seconds > 3600:
+        h = seconds // 3600
+        seconds = seconds
+
+    return remain
+
+
 def run():
 
     #
@@ -35,7 +45,7 @@ def run():
     #
     timeout = get_console_option(['-t', '--time', '--timeout'], int)
     if not timeout:
-        timeout = ask('Timeout in minutes ?', default=10, greater=5)
+        timeout = ask('Timeout in minutes ?', default=10, greater=1)
         nl()
     echo(f'timeout {timeout} minutes', color='white')
     timeout *= 60
@@ -112,22 +122,33 @@ def run():
             sleep = round(reduce - spent, 2)
             start += length
 
-        h = timeout // 3600
-        time_left = timeout - h * 3600
-        m = time_left // 60
-        s = time_left % 60
+        h, m, s = 0, 0, 0
+        rt = timeout
 
-        countdown = f'{m:02}:{s:02}'
-        if h:
-            countdown = f'{h:02}:{countdown}'
+        if rt > 3600:
+            h = rt // 3600
+            rt -= h * 3600
+
+        if rt > 60:
+            m = rt // 60
+            rt -= m * 60
+
+        if rt > 0:
+            s = rt
 
         info(f'\r   - {reduce} sec', bold=True)
-        echo(countdown, bold=True)
-        nl()
+
+        if s:
+            countdown = f'{m:02}:{s:02}'
+            if h:
+                countdown = f'{h:02}:{countdown}'
+            echo(countdown, bold=True)
+
         time.sleep(sleep)
 
-    nl(2)
+    nl(1)
     success('DONE')
+    nl(2)
 
 
 if __name__ == '__main__':
