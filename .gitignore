@@ -5,11 +5,8 @@ db
 venv
 env
 __pycache__
-.env
-.env.prod*
-.env.stag*
-.env.local
-env.local
+.env*
+!.env.example
 .venv
 .cache
 cache
