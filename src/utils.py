@@ -13,6 +13,10 @@ keyboard = cone()
 mouse = ctwo()
 
 
+def open_browser(url):
+    subprocess.run(['open', url, '-F'])
+
+
 def get_random(mn, mx):
     if mx and mx > mn:
         return randint(mn, mx)
