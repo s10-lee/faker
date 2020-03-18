@@ -22,5 +22,5 @@ Options:
 Timeout argument
 
 ```bash
-python3 run.py --timeout 30 --interval 12
+python3 main.py --timeout 30 --interval 12
 ```
