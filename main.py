@@ -141,7 +141,6 @@ def run():
 
 if __name__ == '__main__':
     try:
-
         run()
     except KeyboardInterrupt:
         nl(1)
