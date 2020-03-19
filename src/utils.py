@@ -13,10 +13,6 @@ keyboard = cone()
 mouse = ctwo()
 
 
-def open_browser(url):
-    subprocess.run(['open', url, '-F'])
-
-
 def get_random(mn, mx):
     if mx and mx > mn:
         return randint(mn, mx)
@@ -78,23 +74,6 @@ def get_console_option(shortcuts, typecast=None):
                     return typecast(value)
 
     return value
-
-
-def command_tab():
-    with keyboard.pressed(Key.cmd_l):
-        keyboard.press(Key.tab)
-        keyboard.release(Key.tab)
-
-
-# def mouse_y(v, step, start, end, interval):
-#     while True:
-#         v += step
-#         if start < v < end:
-#             time.sleep(interval)
-#             mouse.move(0, step)
-#         else:
-#             break
-#     return v
 
 
 def mouse_move(val, step, start, end, interval):
