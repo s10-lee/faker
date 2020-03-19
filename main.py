@@ -1,19 +1,7 @@
 from src.mixins import success, info, echo, ask, nl, h1, confirm
 from src.utils import get_console_option, write_code, get_random, get_source
-# get_source
 import time
 import sys
-from pynput.mouse import Button, Controller
-
-
-def time_left(seconds):
-    remain = ''
-    h, m, s = 0, 0, 0
-    if seconds > 3600:
-        h = seconds // 3600
-        seconds = seconds
-
-    return remain
 
 
 def run():
