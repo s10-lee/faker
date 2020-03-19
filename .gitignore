@@ -11,3 +11,4 @@ __pycache__
 .cache
 cache
 db.sqlite3
+config.yaml

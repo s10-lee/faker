@@ -1,11 +1,37 @@
-from os.path import dirname, abspath, join, exists, realpath, curdir
-import os
+#
+# Get PID
+#   process = subprocess.run(['pgrep', 'firefox'], stdout=subprocess.PIPE)
+#   process.stdout.decode()
+#
+# Open applications:
+#   open index.js -a Visual\ Studio\ Code.app
+#   open https://ya.ru -a Firefox
+#
+# Activate application
+#   osascript -e 'tell application "PyCharm" to activate'
+#
+# List all gui application
+#   osascript -e 'tell application "System Events" to get name of (processes where background only is false)'
+#
+#
+#
+#
+# Subprocess examples
+#   process = subprocess.Popen(['pgrep', 'firefox'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+#   my_pid, err = process.communicate()
+#   print(bytes(my_pid).decode())
+#
+# Examples 2
+#   command = ['osascript', '-e',
+#              'tell application "System Events" to get name of (processes where background only is false)']
+#   process = subprocess.run(command, stdout=subprocess.PIPE)
+#   print(process.stdout)
+#
 import subprocess
 from pynput.keyboard import Key, Controller as cone
 from pynput.mouse import Button, Controller as ctwo
 from random import randint
 # import sys
-import glob
 import time
 
 # Init
@@ -13,26 +39,49 @@ keyboard = cone()
 mouse = ctwo()
 
 
-def get_random(mn, mx):
-    if mx and mx > mn:
-        return randint(mn, mx)
-    return mx
+def terminal_command(*args):
+    process = subprocess.run(args, stdout=subprocess.PIPE)
+    return process.stdout.decode().strip()
 
 
-def get_source(wildcard):
-    if wildcard:
-        files = glob.glob(wildcard, recursive=True)
-        return load_files(*files)
-    return None
+def get_countdown(remain_time):
+    countdown = ''
+    h, m, s = 0, 0, 0
+    rt = remain_time
+
+    if rt > 3600:
+        h = rt // 3600
+        rt -= h * 3600
+
+    if rt > 60:
+        m = rt // 60
+        rt -= m * 60
+
+    if rt > 0:
+        s = rt
+
+        if s:
+            countdown = f'{m:02}:{s:02}'
+            if h:
+                countdown = f'{h:02}:{countdown}'
+    return countdown
 
 
-def load_files(*args):
-    result = ''
-    for f in args:
-        path = join(realpath(f))
-        if exists(path):
-            with open(path) as fp:
-                result += ''.join([l for l in fp.readlines()]) + '\n\n\n'
+def get_active_apps():
+    command = ['osascript',
+               '-e',
+               'tell application "System Events" to get name of (processes where background only is false)']
+    process = subprocess.run(command, stdout=subprocess.PIPE)
+    result = [n.strip() for n in process.stdout.decode().split(',')]
+    return result
+
+
+def show_app(app_name):
+    command = ['osascript',
+               '-e',
+               f'tell application "{app_name}" to activate']
+    process = subprocess.run(command, stdout=subprocess.PIPE)
+    result = [n.strip() for n in process.stdout.decode().split(',')]
     return result
 
 
@@ -46,34 +95,6 @@ def press_key(char):
     keyboard.release(char)
     time.sleep(delay)
     return delay
-
-
-def write_code(code: str):
-    spent = 0
-    for i, c in enumerate(code):
-        spent += press_key(c)
-    return round(spent, 2)
-
-
-def get_console_option(shortcuts, typecast=None):
-    import sys
-
-    value = None
-    length = len(sys.argv)
-
-    # TODO: WTF ?
-    # sys_args = []
-    # for a in tuple(sys.argv):
-    #     sys_args.append(a)
-
-    if length:
-        for index, argument in enumerate(sys.argv):
-            if argument in shortcuts and length > index + 1:
-                value = sys.argv[index + 1]
-                if typecast:
-                    return typecast(value)
-
-    return value
 
 
 def mouse_move(val, step, start, end, interval):
@@ -98,8 +119,3 @@ def fake_mouse(limit=5):
         x = mouse_move(x, 1, 600, 900, itr)
         y = mouse_move(y, -1, 400, 800, itr)
         x = mouse_move(x, -1, 600, 900, itr)
-
-
-if __name__ == '__main__':
-    fake_mouse(5)
-

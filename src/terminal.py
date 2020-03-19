@@ -1,7 +1,7 @@
 import sys
 
 
-class BaseConsole:
+class BaseTerminal:
 
     # Debug mode
     DEBUG = True
@@ -251,3 +251,38 @@ class BaseConsole:
             break
 
         return line
+
+
+class Terminal(BaseTerminal):
+
+    def __init__(self, **kwargs):
+
+        self.arguments = {}
+        self.names = kwargs
+
+        next_key = None
+        next_val = 0
+
+        for a in tuple(sys.argv)[1:]:
+
+            if a.startswith('-'):
+                alias = a.strip('-')
+                next_key = self.get_name(alias)
+                next_val = 0
+                self.arguments[next_key] = True
+
+            elif next_key:
+                if next_val > 0:
+                    self.arguments[next_key] = [self.arguments[next_key]] + [a]
+                else:
+                    self.arguments[next_key] = a
+                    next_val += 1
+
+    def get_arg(self, name, default=None):
+        return self.arguments.get(name, default)
+
+    def get_name(self, key):
+        for k, v in self.names.items():
+            if key in v:
+                return k
+        return key

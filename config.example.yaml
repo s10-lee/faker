@@ -1,0 +1,15 @@
+---
+urls:
+  - 'https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map'
+  - 'https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/unshift'
+  - 'https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/copyWithin'
+  - 'https://gomakethings.com/how-to-find-an-item-in-an-array-with-vanilla-javascript/'
+  - 'https://www.npmjs.com/package/array.prototype.find'
+  - 'https://yaml.org/spec/1.2/spec.html'
+
+# path:
+#  - './_source/axios/*.js'
+
+timeout: 60
+
+interval: [12, 20]
