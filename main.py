@@ -24,13 +24,16 @@ def run():
     )
 
     progress = 0
-    interval_every = int(terminal.get_arg('interval', 10)) * 60
+    interval_every = int(terminal.get_arg('interval', 10))
     interval_prev = 0
     interval = choice(intervals)
+    terminal.write(f'Interval {interval_every} min', color='white')
+    terminal.write(f'Density {interval[0]} - {interval[1]} seconds', color='white')
 
     timeout = int(terminal.get_arg('timeout', 60))
-    terminal.write(f'Timeout {timeout} minutes', color='white')
+    terminal.write(f'Timeout {timeout} min', color='white')
     timeout *= 60
+    interval_every *= 60
 
     for i in range(3):
         terminal.write(3 - i, bold=True, color='cyan')
@@ -59,7 +62,7 @@ def run():
         if progress // interval_every > interval_prev:
             interval_prev = progress // interval_every
             interval = choice(tuple(filter(lambda x: x != interval, intervals)))
-            terminal.write(f'Interval {interval}', color='cyan', bold=True)
+            terminal.write(f'Interval {interval}', color='white', bold=True)
 
         time.sleep(sleep)
 
