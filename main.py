@@ -27,6 +27,7 @@ def run():
     interval_every = int(terminal.get_arg('interval', 10))
     interval_prev = 0
     interval = choice(intervals)
+    terminal.write('******************')
     terminal.write(f'Interval {interval_every} min', color='white')
     terminal.write(f'Density {interval[0]} - {interval[1]} seconds', color='white')
 
@@ -34,6 +35,7 @@ def run():
     terminal.write(f'Timeout {timeout} min', color='white')
     timeout *= 60
     interval_every *= 60
+    terminal.write('******************')
 
     for i in range(3):
         terminal.write(3 - i, bold=True, color='cyan')
