@@ -1,41 +1,32 @@
-from src.utils import get_countdown, show_app
+from src.utils import get_countdown, press_key
 from src.terminal import Terminal
-from src.apps import VSCode, Firefox, Safari, Faker, Skype, Telegram
+from src.apps import VSCode, Firefox, Telegram
 import time
 import sys
-from random import randint
+from random import randint, choice
 
 
 # Terminal
-terminal = Terminal(timeout=('t', 'time', 'timeout'), path=('p', 'path'))
+terminal = Terminal(timeout=('t', 'time', 'timeout'), path=('p', 'path'), interval=('i', 'interval'))
 
-# Faker
-faker = Faker(terminal)
-
-vscode = VSCode(terminal.get_arg('path'))
-vscode.open('./_source/index.js')
+vscode = VSCode()
+# terminal.get_arg('path')
+# vscode.open('./_source/index.js')
 
 firefox = Firefox()
 telegram = Telegram()
 
 
-# class Schedule:
-#     def __init__(self, t, a):
-#         self.timeout = t
-#         self.main = a
-#         self.timeline = {t: a}
-#
-#     def planning(self, app, t, offset=120):
-#         self.timeout -= t * 60
-#         if self.timeout > 0:
-#             self.timeline[self.timeout] = app
-#
-#         if self.timeout - offset > 0:
-#             self.timeout -= offset
-#             self.timeline[self.timeout] = self.main
-
-
 def run():
+
+    intervals = (
+        (3, 5), (8, 10), (13, 15), (18, 20)
+    )
+
+    progress = 0
+    interval_every = int(terminal.get_arg('interval', 10)) * 60
+    interval_prev = 0
+    interval = choice(intervals)
 
     timeout = int(terminal.get_arg('timeout', 60))
     terminal.write(f'Timeout {timeout} minutes', color='white')
@@ -48,7 +39,7 @@ def run():
 
     while timeout > 0:
 
-        reduce = randint(8, 14)
+        reduce = randint(*interval)
         if reduce > timeout:
             reduce = timeout
         timeout -= reduce
@@ -57,9 +48,18 @@ def run():
         if vscode.code:
             spent = vscode.write(reduce * 2)
             sleep = round(reduce - spent)
+        else:
+            press_key(' ')
 
         terminal.write(f'\n - {reduce:02} sec', color='cyan', bold=True)
         terminal.write(get_countdown(timeout), bold=True)
+
+        progress += sleep
+
+        if progress // interval_every > interval_prev:
+            interval_prev = progress // interval_every
+            interval = choice(tuple(filter(lambda x: x != interval, intervals)))
+            terminal.write(f'Interval {interval}', color='cyan', bold=True)
 
         time.sleep(sleep)
 

@@ -2,7 +2,6 @@ from src import utils
 import time
 import glob
 import os
-from ruamel.yaml import YAML
 
 
 class Telegram:
@@ -10,6 +9,10 @@ class Telegram:
 
     def open(self):
         return utils.terminal_command('open', '-a', self.name)
+
+
+class Skype(Telegram):
+    name = 'Skype'
 
 
 class Firefox:
@@ -56,24 +59,3 @@ class VSCode:
                     with open(path) as fp:
                         result += ''.join([l for l in fp.readlines()]) + '\n\n\n'
         return result
-
-
-class Skype:
-
-    name = 'Skype'
-
-    def open(self):
-        return utils.terminal_command('open', '-a', self.name)
-
-
-class Faker:
-
-    config_file = 'config.yaml'
-
-    def __init__(self, terminal):
-        yaml = YAML(typ='safe')
-        self.config = yaml.load(open(os.path.abspath(self.config_file)))
-        self.terminal = terminal
-
-    def rotation(self):
-        pass

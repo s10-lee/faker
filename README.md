@@ -8,19 +8,12 @@ pip3 install --user pynput
 ```
 
 ### Usage 
-Open terminal from your IDE
+Open terminal inside IDE
 
 ```
-python3 run.py [options]
+python3 main.py [options]
 
 Options:
---timeout, -t       Duration in minutes             [10 min]
---interval, -i      Event trigger interval          [12 sec]
---path, -p          Wildcard path to source dir     [None]
-```
-
-Timeout argument
-
-```bash
-python3 main.py --timeout 30 --interval 12
+--timeout, -t       Duration in minutes             [60 min]
+--interval, -i      Change interval every...        [10 min]
 ```
