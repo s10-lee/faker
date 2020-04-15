@@ -3,24 +3,45 @@ import time
 import sys
 import multiprocessing as mp
 
+status = False
+
 
 def count():
     i = 0
-    while listener.running:
+    while True:
         i += 1
         time.sleep(1)
         print(f'{i} sec')
 
 
 def watch(*args):
-    print('Mouse moved !')
-    return False
+    global status
+    if status:
+        status = False
+        print('mouse moved !')
 
 
+
+
+listener = Listener(on_move=watch, on_click=watch, on_scroll=watch)
+listener.start()
 try:
-    with Listener(on_move=watch, on_click=watch, on_scroll=watch) as listener:
-        count()
+    listener.wait()
+    status = True
+    i = 0
+    while True:
+        if not status:
+            print('Wait 5 seconds')
+            time.sleep(5)
+            status = True
+
+        i += 1
+        time.sleep(1)
+        print(f'{i} sec')
+
 
 except KeyboardInterrupt:
     print('Exit...')
 
+finally:
+    listener.stop()
